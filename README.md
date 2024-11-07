@@ -1,0 +1,3 @@
+# GENE-AIM: High-Throughput DNA-to-Protein Translation and Alignment System
+
+The goal of GENE-AIM is to develop an efficient tool for translating DNA sequencing reads into proteins and aligning them across all six possible reading frames. Using dynamic programming and a custom alignment algorithm, the tool will compare DNA sequences against known protein databases. Designed with scalability in mind, GENE-AIM leverages parallel processing and distributed computing to handle large metagenomic datasets, providing a high-confidence filtering system for rapid identification of relevant protein matches. This tool aims to enhance functional annotations and comparative genomics in complex microbial communities, making it a valuable resource for large-scale metagenomic analysis.
