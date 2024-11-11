@@ -10,13 +10,13 @@ def translate_to_proteins(dna_sequence):
     return [protein_frame1, protein_frame2, protein_frame3, reverse_frame1, reverse_frame2, reverse_frame3]
 
 # List of DNA sequences to process --> getting this from our synthetic data 
-dna_sequences = ["ATCG...", "GCTA...", ...]  
+dna_sequences = 
 
 # multiprocessing 
 with Pool() as pool:
     translated_sequences = pool.map(translate_to_proteins, dna_sequences)
 
-
+["ATCG...", "GCTA...", ...]  
 #dynamic programming allignment to evaluate allignments in parallel 
 def align_sequences(seq1, seq2):
     # Implement custom alignment using dynamic programming
@@ -31,5 +31,3 @@ with Pool() as pool:
 #filter based on threshold for alignment 
 threshold = 0.95 #or some number that we determine is a good fit
 high_confidence_matches = [score for score in alignment_scores if score > threshold]
-
-
