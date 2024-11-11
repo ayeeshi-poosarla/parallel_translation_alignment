@@ -28,3 +28,8 @@ protein_pairs = [(seq1, seq2) for seq1 in translated_sequences for seq2 in trans
 with Pool() as pool:
     alignment_scores = pool.starmap(align_sequences, protein_pairs)
 
+#filter based on threshold for alignment 
+threshold = 0.95 #or some number that we determine is a good fit
+high_confidence_matches = [score for score in alignment_scores if score > threshold]
+
+
