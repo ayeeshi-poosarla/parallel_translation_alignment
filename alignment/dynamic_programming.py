@@ -1,5 +1,7 @@
 import sys
+from collections import Counter
 from typing import Dict
+from typing import List
 
 if len(sys.argv) < 3:
     print("Usage: python3 script.py <reference> <seq1> <seq2> ... ")
@@ -78,5 +80,33 @@ def global_alignment(seq1, seq2, match=1, mismatch=-1, gap=-2):
     # Final similarity score
     return dp[m][n]
 
+def consensus_calling(sequences: List[str]) -> str:
+    """
+    Computes the consensus sequence from a list of DNA sequences.
+    """
+    if not sequences:
+        return ""
+    
+    # Ensure all sequences are of the same length
+    seq_length = len(sequences[0])
+    for seq in sequences:
+        if len(seq) != seq_length:
+            raise ValueError("All sequences must have the same length for consensus calling.")
+    
+    # Transpose sequences and compute consensus
+    consensus = []
+    for i in range(seq_length):
+        column = [seq[i] for seq in sequences]
+        most_common_base, _ = Counter(column).most_common(1)[0]
+        consensus.append(most_common_base)
+    
+    return ''.join(consensus)
+
 reference = read_Fastq(sys.argv[1])
-sequences = [read_Fastq(filename) for filename in sys.argv[2:]]
+input_sequences = [read_Fastq(filename) for filename in sys.argv[2:]]
+sequences = [read_Fastq(filename) for filename in sys.argv[2]]
+
+if reference.length == 1:
+    reference = translate_dna_to_protein(reference)
+
+peptide = [translate_dna_to_protein(seq) for seq in sequences]
