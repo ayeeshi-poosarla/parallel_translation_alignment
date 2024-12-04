@@ -1,62 +1,5 @@
-import sys
 from collections import Counter
-from typing import Dict
 from typing import List
-
-if len(sys.argv) < 3:
-    print("Usage: python3 script.py <reference> <seq1> <seq2> ... ")
-    sys.exit(1)
-
-def read_Fastq(filename):
-    sequences = []
-    with open(filename, 'r') as file:
-        while True:
-            file.readline()
-            seq = file.readline().strip()
-            file.readline()
-            file.readline()
-            if len(seq) == 0:
-                break
-            sequences.append(seq)
-    return sequences
-
-def translate_dna_to_protein(dna_sequence: str) -> str:
-    # Genetic code dictionary
-    codon_table: Dict[str, str] = {
-        'ATA': 'I', 'ATC': 'I', 'ATT': 'I', 'ATG': 'M',
-        'ACA': 'T', 'ACC': 'T', 'ACG': 'T', 'ACT': 'T',
-        'AAC': 'N', 'AAT': 'N', 'AAA': 'K', 'AAG': 'K',
-        'AGC': 'S', 'AGT': 'S', 'AGA': 'R', 'AGG': 'R',
-        'CTA': 'L', 'CTC': 'L', 'CTG': 'L', 'CTT': 'L',
-        'CCA': 'P', 'CCC': 'P', 'CCG': 'P', 'CCT': 'P',
-        'CAC': 'H', 'CAT': 'H', 'CAA': 'Q', 'CAG': 'Q',
-        'CGA': 'R', 'CGC': 'R', 'CGG': 'R', 'CGT': 'R',
-        'GTA': 'V', 'GTC': 'V', 'GTG': 'V', 'GTT': 'V',
-        'GCA': 'A', 'GCC': 'A', 'GCG': 'A', 'GCT': 'A',
-        'GAC': 'D', 'GAT': 'D', 'GAA': 'E', 'GAG': 'E',
-        'GGA': 'G', 'GGC': 'G', 'GGG': 'G', 'GGT': 'G',
-        'TCA': 'S', 'TCC': 'S', 'TCG': 'S', 'TCT': 'S',
-        'TTC': 'F', 'TTT': 'F', 'TTA': 'L', 'TTG': 'L',
-        'TAC': 'Y', 'TAT': 'Y', 'TAA': '*', 'TAG': '*',
-        'TGC': 'C', 'TGT': 'C', 'TGA': '*', 'TGG': 'W',
-    }
-
-    # Ensure the sequence length is a multiple of 3
-    n = len(dna_sequence)
-    if n % 3 != 0:
-        dna_sequence = dna_sequence[:n - (n % 3)]
-    
-    # Translate the sequence
-    protein_sequence = []
-    for i in range(0, len(dna_sequence), 3):
-        codon = dna_sequence[i:i + 3]
-        if codon in codon_table:
-            amino_acid = codon_table[codon]
-            if amino_acid == '*':  # Stop codon
-                break
-            protein_sequence.append(amino_acid)
-    
-    return ''.join(protein_sequence)
 
 def global_alignment(seq1, seq2, match=1, mismatch=-1, gap=-2):
     m, n = len(seq1), len(seq2)
@@ -79,34 +22,3 @@ def global_alignment(seq1, seq2, match=1, mismatch=-1, gap=-2):
 
     # Final similarity score
     return dp[m][n]
-
-def consensus_calling(sequences: List[str]) -> str:
-    """
-    Computes the consensus sequence from a list of DNA sequences.
-    """
-    if not sequences:
-        return ""
-    
-    # Ensure all sequences are of the same length
-    seq_length = len(sequences[0])
-    for seq in sequences:
-        if len(seq) != seq_length:
-            raise ValueError("All sequences must have the same length for consensus calling.")
-    
-    # Transpose sequences and compute consensus
-    consensus = []
-    for i in range(seq_length):
-        column = [seq[i] for seq in sequences]
-        most_common_base, _ = Counter(column).most_common(1)[0]
-        consensus.append(most_common_base)
-    
-    return ''.join(consensus)
-
-reference = read_Fastq(sys.argv[1])
-input_sequences = [read_Fastq(filename) for filename in sys.argv[2:]]
-sequences = [read_Fastq(filename) for filename in sys.argv[2]]
-
-if reference.length == 1:
-    reference = translate_dna_to_protein(reference)
-
-peptide = [translate_dna_to_protein(seq) for seq in sequences]
