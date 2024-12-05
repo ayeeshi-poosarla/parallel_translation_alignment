@@ -1,0 +1,5 @@
+Best Matching Protein Details:
+Protein Sequence: >8EQS_1|Chains A, B|ORF3a protein|Severe acute respiratory syndrome coronavirus (2901879)
+Max K-mer Matches: 0
+Alignment Score: 0
+Total Match Score: 0
