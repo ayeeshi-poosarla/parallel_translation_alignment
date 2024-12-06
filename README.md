@@ -7,3 +7,10 @@ The initial input for the function is the input sequence that should be compared
 
 ## Step X: Dynamic Programming
 The amino acid sequences are used to match the input sequence to the proteins. The BLOSUM62 was used as the values in the dyanmic programming approach. 
+
+## Step X: Parallel Processing 
+This step combines the previous code and sends the proteins who have the 3 highest matched through kmer indexing to the dynamic programming algorithm, which then retrieves the protein that is the greatest match for that specific gene. These files are located in official_program. 
+
+official_program contains tests called "official_tests_keep" that were used to test the functinality of the method. The final working method is located in final_program_manual.py. Here, the code is set-up, with one of our test cases (multiple_match) and retrieves the best protein for each gene in the terminal. It also calculates the parallel processing, sequential processing, and f1 score. 
+
+To run this code, simply run final_program_manual.py. To test other test cases, final_program_automatic should be used. Here the location of the reference (fastq file) and proteins (fasta file) should be submitted in the locations reference_genomes_file =  and protein_file =. Some example fasta and fastq files to run are located officail_tests_keep. 

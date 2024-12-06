@@ -29,21 +29,21 @@ Gene13,Gene13_Protein
 Gene14,Gene14_Protein
 """
 
-predictions_data = """Reference_Gene_Name,Protein_Gene_Name
-Gene1,Gene1_Protein
-Gene2,Gene2_Protein
-Gene3,Gene3_Protein
-Gene4,Gene4_Protein
-Gene5,Gene4_Protein
-Gene6,Gene6_Protein
-Gene7,Gene7_Protein
-Gene8,Gene4_Protein
-Gene9,Gene9_Protein
-Gene10,Gene10_Protein
-Gene11,Gene11_Protein
-Gene12,Gene12_Protein
-Gene13,Gene13_Protein
-Gene14,Gene4_Protein
+predictions_data = """Reference_Gene_Name,Protein_Gene_Name,Alignment_Score
+Gene1,Gene1_Protein,15.0
+Gene2,Gene2_Protein,4.5
+Gene3,Gene9_Protein,4.5
+Gene4,Gene4_Protein,6.5
+Gene5,Gene11_Protein,5.0
+Gene6,Gene2_Protein,3.5
+Gene7,Gene14_Protein,7.0
+Gene8,Gene4_Protein,4.0
+Gene9,Gene1_Protein,4.0
+Gene10,Gene8_Protein,5.0
+Gene11,Gene5_Protein,2.5
+Gene12,Gene14_Protein,7.0
+Gene13,Gene13_Protein,5.0
+Gene14,Gene4_Protein,4.0
 """
 
 # Load the data
