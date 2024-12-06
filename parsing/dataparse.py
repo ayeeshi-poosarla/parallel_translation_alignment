@@ -6,6 +6,24 @@ if len(sys.argv) < 3:
     sys.exit(1)
 
 def translate_dna_to_protein(dna_sequence: str) -> str:
+    """
+    Translates a DNA sequence into a protein sequence based on the standard genetic code.
+    
+    Args:
+        dna_sequence (str): A string representing a DNA sequence composed of the bases
+                            'A', 'T', 'C', and 'G'. The sequence length should ideally
+                            be a multiple of 3 (codons).
+    
+    Returns:
+        str: A string representing the translated protein sequence, where each codon
+             is converted to its corresponding amino acid. Translation halts at the first
+             stop codon ('TAA', 'TAG', 'TGA').
+    
+    Notes:
+        - Non-multiple-of-three sequences are truncated from the end to ensure codon alignment.
+        - Stop codons ('*') are not included in the returned protein sequence.
+    """
+    
     # Genetic code dictionary
     codon_table: Dict[str, str] = {
         'ATA': 'I', 'ATC': 'I', 'ATT': 'I', 'ATG': 'M',

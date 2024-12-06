@@ -4,3 +4,6 @@ The goal of ALIGNer is to develop an efficient tool for translating DNA sequenci
 
 ## Step 1: Preprocessing
 The initial input for the function is the input sequence that should be compared against multiple proteins and all the proteins that the user wants to compare the sequence against. Since the input sequence is given in a nucleotide sequence but the proteins are in amino acid sequences, the input sequence is converted to an amino acid sequence.
+
+## Step X: Dynamic Programming
+The amino acid sequences are used to match the input sequence to the proteins. The BLOSUM62 was used as the values in the dyanmic programming approach. 
