@@ -1,0 +1,7 @@
+# Copy from test_case 
+reference_genomes = [
+    "ATGGCTGCTGCTGCCGCCGCTGCTGCCGCTGCTGCTGCTGCTGCTGCCGCTGCCGCTGCTTAA"
+]
+    
+protein_list = [
+        "MAAAAAAATMPLAAAAAAAA", "MAAAAAAAAAAAAAAAAAAAA"] 

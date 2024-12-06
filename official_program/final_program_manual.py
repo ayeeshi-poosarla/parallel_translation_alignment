@@ -166,20 +166,7 @@ def rank_proteins_for_multiple_references(reference_genomes: List[str], protein_
 
     # Assume you have true labels for F1 score calculation (these would be known in a real use case)
     true_labels = [
-        "MAIVMGR*KG",
-        "MKTAYIAKQRQISFVKSHFSRQDHTNSNQKIVGTLRY",
-        "MASHKLDWSWRDIEQ*",
-        "MALWMRLLPLLALLALWGPDPGFA",
-        "MGTGEGR",
-        "MGCAVGGA",
-        "MGAAGGR",
-        "MGGRGGR",
-        "MGAGGRG",
-        "MGGTGAAG",
-        "MGGGGR",
-        "MGGAGGA",
-        "MGGAAGG",
-        "MGRGGGR" ] 
+        "DTPGTDYECETLFSWNVTRR" ] 
     
     predicted_proteins = list(best_query_sequences.values())
     predicted_proteinsf1 = predicted_proteins[:len(true_labels)]
@@ -188,39 +175,13 @@ def rank_proteins_for_multiple_references(reference_genomes: List[str], protein_
     # Return the results along with timing and F1 score
     return best_query_sequences, best_scores, best_alignments, sequential_time, parallel_time, f1
 
-# Example usage
+# Copy from test_case 
 reference_genomes = [
-    "ATGGCCATTGTAATGGGCCGAGGTT",
-    "ATGAGCGGCCAGTTGAAGTGAAGTCACTGAC",
-    "ATGGCGTAGAGGAGGAGGAGAGGA",
-    "ATGGTGGTGGTAGGCGGAGGAGAGGTGTAG",
-    "ATGGTGAGGAGGTTAGGAGTAA",
-    "ATGCAGTGAAGGAGGAGTGAAG",
-    "ATGAGGAGAGGAGGAGTGAAG",
-    "ATGAGGAGGAGGGAGGAGTAA",
-    "ATGGTGGAGAGGAGAGTGAAG",
-    "ATGCAGTGAGGAGGAAGTAA",
-    "ATGGAGGAGGAGGAGGTAAAG",
-    "ATGGTGAGAGGAGGAGTGAAG",
-    "ATGCAGTGAGGAGGAGTGAAG",
-    "ATGAGGAGGAGGAGGAGTGAAG"
+    "ATGGCCGCTGCTGCTGCTGCCGCCGCCGCTGCCGCCGCTGCCGCCGCCGCTGCCGCTGCTTAA"
 ]
     
 protein_list = [
-        "MAIVMGR*KG",
-        "MKTAYIAKQRQISFVKSHFSRQDHTNSNQKIVGTLRY",
-        "MASHKLDWSWRDIEQ*",
-        "MALWMRLLPLLALLALWGPDPGFA",
-        "MGTGEGR",
-        "MGCAVGGA",
-        "MGAAGGR",
-        "MGGRGGR",
-        "MGAGGRG",
-        "MGGTGAAG",
-        "MGGGGR",
-        "MGGAGGA",
-        "MGGAAGG",
-        "MGRGGGR" ] 
+        "MPTGACDAKLVTRVQHGTSPY", "DTPGTDYECETLFSWNVTRR","MPTGTDYECSYTLFSWNVTRR" ] 
 
 
 k = 4
