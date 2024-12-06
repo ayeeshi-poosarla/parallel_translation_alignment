@@ -121,85 +121,37 @@ def compare_protein_sequences(seq1, seq2) -> int:
             j -= 1
         elif score_matrix[i-1][j] >= score_matrix[i][j-1]:
             aligned_seq1.append(seq1[i-1])
-            aligned_seq2.append("-")  # Gap in seq2
+            aligned_seq2.append("-")
             i -= 1
         else:
-            aligned_seq1.append("-")  # Gap in seq1
+            aligned_seq1.append("-")
             aligned_seq2.append(seq2[j-1])
             j -= 1
 
-    # Return the score and alignment
-    return max_score, ''.join(reversed(aligned_seq1)), ''.join(reversed(aligned_seq2))
+    # Return the aligned sequences
+    return ''.join(reversed(aligned_seq1)), ''.join(reversed(aligned_seq2)), max_score
 
+# Setup PySpark session
+spark = SparkSession.builder.appName("GenomicAnalysis").getOrCreate()
 
-# Function to find the best matching protein name from a protein database
-def find_best_matching_protein(genomic_sequence: str, protein_database: List[Tuple[str, str]], k: int) -> Tuple[str, float, str]:
-    translated_protein = translate_genomic_sequence(genomic_sequence)
-    best_score, best_match_name, best_alignment = -1, None, None
+# Main function to process and rank proteins
+def rank_proteins_for_reference(reference: str, protein_sequences: List[str], k: int) -> List[str]:
+    """
+    Given a reference protein sequence and a list of other protein sequences, 
+    ranks proteins by the number of k-mer matches with the reference sequence.
+    """
+    ranked_proteins = rank_proteins_by_matches(reference, protein_sequences, k)
+    return ranked_proteins
 
-    ranked_proteins = rank_proteins_by_matches(genomic_sequence, [protein for _, protein in protein_database], k)
+# Example usage:
+reference_sequence = "MKTAYIAKQRQISFVKSHFSRQHFLASVHTKLNQ"
+protein_sequences = [
+    "MKTAYIAKQRQISFVKSHFSRQHFLASVHTKLNQ",
+    "MKTAYIAKQRQISFVKHFSRQHFLASVHTKLNQ",  # Slight modification
+    "MKTAHIQKRQISFVKSHFSRQHFLASVHTKLNQ"
+]
+k = 3  # K-mer length
 
-    for header, protein in protein_database:
-        if protein in ranked_proteins:
-            score = compare_protein_sequences(translated_protein, protein)
-            if score > best_score:
-                best_score, best_match_name = score, header
-
-    return best_match_name, best_score, best_alignment
-
-# Function to parse genomic/protein sequences from a FASTA file
-def parse_fasta(file_path: str) -> List[Tuple[str, str]]:
-    with open(file_path, "r") as file:
-        data = file.read().splitlines()
-
-    sequences = []
-    seq_header = ""
-    seq_data = []
-
-    for line in data:
-        if line.startswith(">"):
-            if seq_header:
-                sequences.append((seq_header, "".join(seq_data)))
-            seq_header = line[1:]
-            seq_data = []
-        else:
-            seq_data.append(line.strip())
-
-    if seq_header:
-        sequences.append((seq_header, "".join(seq_data)))
-
-    return sequences
-
-# Initialize PySpark
-spark = SparkSession.builder \
-    .appName("GenomicSequenceMatching") \
-    .getOrCreate()
-
-sc = spark.sparkContext
-
-# Paths to files
-genomic_file = "C:/Users/ishit/CompGenom/project/parallel_translation_alignment/tests/exact_match/sequence.fasta"  # Replace with your genomic FASTA file
-protein_file = "C:/Users/ishit/CompGenom/project/parallel_translation_alignment/tests/exact_match/protein.fasta"  # Replace with your protein FASTA file
-
-# Load and broadcast protein database
-protein_database = parse_fasta(protein_file)
-broadcast_protein_db = sc.broadcast(protein_database)
-
-# Load genomic sequences and parallelize
-genomic_sequences = parse_fasta(genomic_file)
-genomic_rdd = sc.parallelize(genomic_sequences)
-
-# Map genomic sequences to their best matching protein
-def find_best_match(genomic_entry: Tuple[str, str], broadcast_db: Broadcast, k: int) -> Tuple[str, str, float, str]:
-    header, sequence = genomic_entry
-    best_match_name, best_score, best_alignment = find_best_matching_protein(sequence, broadcast_db.value, k)
-    alignment_str = str(best_alignment)
-    return header, best_match_name, best_score, alignment_str
-
-results_rdd = genomic_rdd.map(lambda x: find_best_match(x, broadcast_protein_db, k=3))
-
-# Collect and print results
-results = results_rdd.collect()
-print("\nBest Matching Proteins and Alignment Scores:")
-for genomic_header, protein_match, score, alignment in results:
-    print(f"Genomic Header: {genomic_header}, Best Protein Match: {protein_match}, Alignment: {str(score)}")
+# Rank proteins
+ranked_proteins = rank_proteins_for_reference(reference_sequence, protein_sequences, k)
+print("Ranked Proteins: ", ranked_proteins)
