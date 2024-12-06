@@ -5,23 +5,6 @@ if len(sys.argv) < 3:
     print("Usage: python3 script.py <sequence> <protein1> <protein2> ... <best_match.txt>")
     sys.exit(1)
 
-# sequence = sys.argv[1]
-# proteins = sys.argv[2:-2]
-# output = sys.argv[-1]
-
-def read_Fastq(filename):
-    sequences = []
-    with open(filename, 'r') as file:
-        while True:
-            file.readline()
-            seq = file.readline().strip()
-            file.readline()
-            file.readline()
-            if len(seq) == 0:
-                break
-            sequences.append(seq)
-    return sequences
-
 def translate_dna_to_protein(dna_sequence: str) -> str:
     # Genetic code dictionary
     codon_table: Dict[str, str] = {
