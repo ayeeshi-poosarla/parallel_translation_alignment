@@ -157,8 +157,8 @@ def rank_proteins_for_multiple_references(reference_genomes: List[str], referenc
     return best_query_sequences, best_scores, best_alignments
 
 # Example of how to use the function with multiple reference genomes
-reference_genomes_file = "C:/Users/ishit/CompGenom/project/parallel_translation_alignment/distributed_computing/official_tests_keep/multiple_match/reference.fastq"  # Path to reference genomes file
-protein_file = "C:/Users/ishit/CompGenom/project/parallel_translation_alignment/distributed_computing/official_tests_keep/multiple_match/proteins.fasta"  # Path to protein sequences file
+reference_genomes_file = "C:/Users/ishit/CompGenom/project/parallel_translation_alignment/official_program/official_tests_keep/multiple_match/reference.fastq"  # Path to reference genomes file
+protein_file = "C:/Users/ishit/CompGenom/project/parallel_translation_alignment/official_program/official_tests_keep/multiple_match/proteins.fasta"  # Path to protein sequences file
 
 # Read the reference genomes and protein sequences from files
 reference_genomes = read_sequences_from_file(reference_genomes_file, "fasta")
