@@ -1,8 +1,0 @@
->standard Test case for standard
-ATGGGTAATAATTAA
->alternative_start Test case for alternative_start
-GTGGATGATAATTAG
->rgd_motif Test case for rgd_motif
-ATGCGTGGTGATTAA
->multi_frame Test case for multi_frame
-ATGGCTCGTATGGACTAA
