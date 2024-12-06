@@ -37,7 +37,7 @@ def get_top_kmer_match(kmer_map: dict) -> Tuple[str, int]:
     return top_kmer, len(kmer_map[top_kmer])
 
 # Smith-Waterman alignment implementation
-def smith_waterman(reference, query, match=2, mismatch=-1, gap_penalty=-2):
+def smith_waterman(reference, query, match=2, mismatch=-1, gap_penalty=-0.5):
     len_ref, len_query = len(reference), len(query)
     scoring_matrix = np.zeros((len_ref + 1, len_query + 1))
 
@@ -51,7 +51,7 @@ def smith_waterman(reference, query, match=2, mismatch=-1, gap_penalty=-2):
             else:
                 score = scoring_matrix[i - 1, j - 1] + mismatch
             
-            score = max(score, scoring_matrix[i - 1, j] + gap_penalty, scoring_matrix[i, j - 1] + gap_penalty, 0)
+            score = max(score, scoring_matrix[i - 1, j] + gap_penalty, scoring_matrix[i, j - 1] + gap_penalty)
             scoring_matrix[i, j] = score
             
             if score > max_score:
