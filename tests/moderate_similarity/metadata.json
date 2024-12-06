@@ -1,0 +1,13 @@
+{
+  "description": "Test case for moderate_similarity",
+  "protein_match": "test_protein_moderate_similarity",
+  "expected_alignment_score": 0.7,
+  "reading_frames": {
+    "frame1": "MAAAAAAAAAAAAAAAAAAA*",
+    "frame2": "WPPLPLLPLLPLLPLPLPLP",
+    "frame3": "GRRCRCCRCCRCCRCRCRCL",
+    "reverse_frame1": "LGSGSGSGSSGSSGSSGSGGH",
+    "reverse_frame2": "*AAAAAAAAAAAAAAAAAAA",
+    "reverse_frame3": "RQRQRQRQQRQQRQQRQRRP"
+  }
+}

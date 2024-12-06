@@ -1,0 +1,13 @@
+{
+  "description": "Test case for exact_match",
+  "protein_match": "test_protein_exact_match",
+  "expected_alignment_score": 1.0,
+  "reading_frames": {
+    "frame1": "MAAAAAAAAAAAAAAAAAAA*",
+    "frame2": "WLLLPPLLPLLLLLLPLPLL",
+    "frame3": "GCCCRRCCRCCCCCCRCRCL",
+    "reverse_frame1": "LSSGSGSSSSSSGSSGGSSSH",
+    "reverse_frame2": "*AAAAAAAAAAAAAAAAAAA",
+    "reverse_frame3": "KQRQRQQQQQQRQQRRQQQP"
+  }
+}

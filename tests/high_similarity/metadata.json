@@ -1,0 +1,13 @@
+{
+  "description": "Test case for high_similarity",
+  "protein_match": "test_protein_high_similarity",
+  "expected_alignment_score": 0.9,
+  "reading_frames": {
+    "frame1": "MAAAAAAAAAAAAAAAAAAA*",
+    "frame2": "WLLLLPLPPPPPPPLLLPLL",
+    "frame3": "GCCCCRCRRRRRRRCCCRCL",
+    "reverse_frame1": "LSSGSSSGGGGGGGSGSSSSH",
+    "reverse_frame2": "*AAAAAAAAAAAAAAAAAAA",
+    "reverse_frame3": "KQRQQQRRRRRRRQRQQQQP"
+  }
+}
