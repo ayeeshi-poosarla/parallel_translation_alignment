@@ -101,7 +101,7 @@ def rank_proteins_by_matches(reference: str, proteins: List[str], k: int) -> Lis
 
 # Smith-Waterman alignment implementation
 def smith_waterman(reference, query, match=2, mismatch=-1, gap_penalty=-2):
-     """
+    """
     Performs Smith-Waterman alignment between the reference and query sequences.
     
     Parameters:
@@ -127,7 +127,12 @@ def smith_waterman(reference, query, match=2, mismatch=-1, gap_penalty=-2):
             else:
                 score = scoring_matrix[i - 1, j - 1] + mismatch
             
-            score = max(score, scoring_matrix[i - 1, j] + gap_penalty, scoring_matrix[i, j - 1] + gap_penalty, 0)
+            score = max(
+                score,
+                scoring_matrix[i - 1, j] + gap_penalty,
+                scoring_matrix[i, j - 1] + gap_penalty,
+                0
+            )
             scoring_matrix[i, j] = score
             
             if score > max_score:
@@ -158,12 +163,14 @@ def smith_waterman(reference, query, match=2, mismatch=-1, gap_penalty=-2):
     
     return aligned_ref, aligned_query, max_score
 
+
 # Setup PySpark session
 spark = SparkSession.builder \
     .appName("GenomicAnalysis") \
     .config("spark.driver.memory", "8g") \
     .config("spark.executor.memory", "8g") \
     .getOrCreate()
+
 
 # Function to calculate F1 score (Assuming ground truth is available)
 def calculate_f1_score(predicted: List[str], true: List[str]) -> float:
