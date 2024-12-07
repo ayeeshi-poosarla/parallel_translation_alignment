@@ -8,15 +8,45 @@ import numpy as np
 
 # Function to translate a genomic DNA sequence into a protein sequence
 def translate_genomic_sequence(dna_sequence: str) -> str:
+    """
+    Translates a given DNA sequence into its corresponding protein sequence.
+
+    Args:
+        dna_sequence (str): The input genomic DNA sequence.
+
+    Returns:
+        str: The translated protein sequence.
+    """
     dna_seq = Seq(dna_sequence)
     return str(dna_seq.translate())
 
 # Function to generate k-mers from a sequence
 def generate_kmers(sequence: str, k: int) -> List[str]:
+    """
+    Generates all possible k-mers from a given sequence.
+
+    Args:
+        sequence (str): The input sequence.
+        k (int): The length of each k-mer.
+
+    Returns:
+        List[str]: A list of k-mers.
+    """
     return [sequence[i:i + k] for i in range(len(sequence) - k + 1)]
 
 # Build a hashmap of k-mers in the reference sequence to the positions they match in the protein sequence
 def build_kmer_index(reference: str, protein: str, k: int) -> dict:
+    """
+    Builds a k-mer index for the reference and protein sequences, mapping k-mers to positions in the protein.
+
+    Args:
+        reference (str): The reference genomic sequence.
+        protein (str): The protein sequence to match k-mers against.
+        k (int): The length of each k-mer.
+
+    Returns:
+        dict: A dictionary mapping k-mers to positions in the protein sequence.
+    """
     kmer_map = {}
     for i in range(len(reference) - k + 1):
         kmer = reference[i:i + k]
@@ -29,6 +59,16 @@ def build_kmer_index(reference: str, protein: str, k: int) -> dict:
 
 # Get the top 3 k-mers with the highest number of matches
 def get_top_kmers(kmer_map: dict, top_n=3) -> List[Tuple[str, int]]:
+    """
+    Retrieves the top N k-mers from the k-mer index sorted by the number of matches.
+
+    Args:
+        kmer_map (dict): A dictionary of k-mers and their match positions.
+        top_n (int): The number of top k-mers to retrieve.
+
+    Returns:
+        List[Tuple[str, int]]: A list of tuples containing the k-mer and its number of matches.
+    """
     if not kmer_map:
         return []
     # Sort k-mers by the number of matches (descending order)
@@ -37,6 +77,17 @@ def get_top_kmers(kmer_map: dict, top_n=3) -> List[Tuple[str, int]]:
 
 # Rank proteins by the number of k-mer matches with the reference
 def rank_proteins_by_matches(reference: str, proteins: List[str], k: int) -> List[str]:
+     """
+    Ranks proteins based on the number of k-mer matches with a given reference.
+
+    Args:
+        reference (str): The reference protein sequence.
+        proteins (List[str]): A list of protein sequences to rank.
+        k (int): The length of the k-mers.
+
+    Returns:
+        List[str]: A sorted list of protein names based on match counts.
+    """
     protein_match_data = []
     for protein in proteins:
         kmer_map = build_kmer_index(reference, protein, k)
@@ -50,6 +101,19 @@ def rank_proteins_by_matches(reference: str, proteins: List[str], k: int) -> Lis
 
 # Smith-Waterman alignment implementation
 def smith_waterman(reference, query, match=2, mismatch=-1, gap_penalty=-2):
+    """
+    Performs Smith-Waterman local sequence alignment on the reference and query sequences.
+
+    Args:
+        reference (str): The reference sequence.
+        query (str): The query sequence.
+        match (int): The score for a match.
+        mismatch (int): The penalty for a mismatch.
+        gap_penalty (int): The penalty for a gap.
+
+    Returns:
+        Tuple[str, str, int]: The aligned reference and query sequences along with the alignment score.
+    """
     len_ref, len_query = len(reference), len(query)
     scoring_matrix = np.zeros((len_ref + 1, len_query + 1))
 
@@ -99,6 +163,16 @@ spark = SparkSession.builder.appName("GenomicAnalysis").getOrCreate()
 
 # Function to read FASTA/FASTQ file and return sequences as dictionary
 def read_sequences_from_file(file_path: str, file_format: str = "fasta") -> Dict[str, str]:
+     """
+    Reads sequences from a FASTA or FASTQ file and returns them as a dictionary.
+
+    Args:
+        file_path (str): The file path to the FASTA/FASTQ file.
+        file_format (str): The format of the file (either 'fasta' or 'fastq').
+
+    Returns:
+        Dict[str, str]: A dictionary of sequence IDs and their corresponding sequences.
+    """
     sequences = {}
     for record in SeqIO.parse(file_path, file_format):
         sequences[record.id] = str(record.seq)
@@ -106,6 +180,19 @@ def read_sequences_from_file(file_path: str, file_format: str = "fasta") -> Dict
 
 # Main function to process and rank proteins against multiple genomes
 def rank_proteins_for_multiple_references(reference_genomes: List[str], reference_names: List[str], protein_sequences: List[str], protein_names: List[str], k: int) -> Dict[str, Tuple[str, int, Tuple[str, str]]]:
+    """
+    Ranks proteins for multiple reference genomes and performs local alignments.
+
+    Args:
+        reference_genomes (List[str]): List of reference genome sequences.
+        reference_names (List[str]): List of reference genome names.
+        protein_sequences (List[str]): List of protein sequences to align.
+        protein_names (List[str]): List of protein names.
+        k (int): The length of the k-mers for matching.
+
+    Returns:
+        Dict[str, Tuple[str, int, Tuple[str, str]]]: A dictionary containing the best protein, score, and alignment for each reference genome.
+    """
     best_scores = {}
     best_alignments = {}
     best_query_sequences = {}
@@ -115,6 +202,7 @@ def rank_proteins_for_multiple_references(reference_genomes: List[str], referenc
 
     # Define a function to process each reference genome
     def process_reference(reference_genome, reference_name):
+        
         best_score = float('-inf')
         best_alignment = None
         best_query_sequence = None
