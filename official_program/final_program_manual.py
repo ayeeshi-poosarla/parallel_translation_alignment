@@ -9,15 +9,44 @@ from sklearn.metrics import f1_score
 
 # Function to translate a genomic DNA sequence into a protein sequence
 def translate_genomic_sequence(dna_sequence: str) -> str:
+    """
+    Translates a genomic DNA sequence into a protein sequence.
+    
+    Parameters:
+        dna_sequence (str): The genomic DNA sequence to be translated.
+        
+    Returns:
+        str: The resulting protein sequence.
+    """
     dna_seq = Seq(dna_sequence)
     return str(dna_seq.translate())
 
 # Function to generate k-mers from a sequence
 def generate_kmers(sequence: str, k: int) -> List[str]:
+    """
+    Translates a genomic DNA sequence into a protein sequence.
+    
+    Parameters:
+        dna_sequence (str): The genomic DNA sequence to be translated.
+        
+    Returns:
+        str: The resulting protein sequence.
+    """
     return [sequence[i:i + k] for i in range(len(sequence) - k + 1)]
 
 # Build a hashmap of k-mers in the reference sequence to the positions they match in the protein sequence
 def build_kmer_index(reference: str, protein: str, k: int) -> dict:
+    """
+    Builds a hashmap of k-mers in the reference sequence and the positions they match in the protein sequence.
+    
+    Parameters:
+        reference (str): The reference sequence.
+        protein (str): The protein sequence to be indexed.
+        k (int): The length of the k-mer.
+        
+    Returns:
+        dict: A dictionary with k-mers as keys and their match positions as values.
+    """
     kmer_map = {}
     for i in range(len(reference) - k + 1):
         kmer = reference[i:i + k]
@@ -30,6 +59,16 @@ def build_kmer_index(reference: str, protein: str, k: int) -> dict:
 
 # Get the top 3 k-mers with the highest number of matches
 def get_top_kmers(kmer_map: dict, top_n=3) -> List[Tuple[str, int]]:
+    """
+    Gets the top k-mers with the highest number of matches from a k-mer map.
+    
+    Parameters:
+        kmer_map (dict): A dictionary of k-mers and their match positions.
+        top_n (int): The number of top k-mers to return.
+        
+    Returns:
+        List[Tuple[str, int]]: A list of the top k-mers and their match counts.
+    """
     if not kmer_map:
         return []
     # Sort k-mers by the number of matches (descending order)
@@ -38,6 +77,17 @@ def get_top_kmers(kmer_map: dict, top_n=3) -> List[Tuple[str, int]]:
 
 # Rank proteins by the number of k-mer matches with the reference
 def rank_proteins_by_matches(reference: str, proteins: List[str], k: int) -> List[str]:
+    """
+    Ranks proteins based on the number of k-mer matches with the reference sequence.
+    
+    Parameters:
+        reference (str): The reference sequence.
+        proteins (List[str]): A list of protein sequences to be ranked.
+        k (int): The length of the k-mer.
+        
+    Returns:
+        List[str]: A list of proteins ranked by the number of k-mer matches.
+    """
     protein_match_data = []
     for protein in proteins:
         kmer_map = build_kmer_index(reference, protein, k)
@@ -51,6 +101,19 @@ def rank_proteins_by_matches(reference: str, proteins: List[str], k: int) -> Lis
 
 # Smith-Waterman alignment implementation
 def smith_waterman(reference, query, match=2, mismatch=-1, gap_penalty=-2):
+     """
+    Performs Smith-Waterman alignment between the reference and query sequences.
+    
+    Parameters:
+        reference (str): The reference sequence.
+        query (str): The query sequence.
+        match (int): The score for a match (default 2).
+        mismatch (int): The score for a mismatch (default -1).
+        gap_penalty (int): The penalty for gaps (default -2).
+        
+    Returns:
+        Tuple[str, str, int]: The aligned reference and query sequences, and the alignment score.
+    """
     len_ref, len_query = len(reference), len(query)
     scoring_matrix = np.zeros((len_ref + 1, len_query + 1))
 
@@ -104,11 +167,32 @@ spark = SparkSession.builder \
 
 # Function to calculate F1 score (Assuming ground truth is available)
 def calculate_f1_score(predicted: List[str], true: List[str]) -> float:
+    """
+    Calculates the F1 score by comparing the predicted protein sequences with the true protein sequences.
+    
+    Parameters:
+        predicted (List[str]): The list of predicted protein sequences.
+        true (List[str]): The list of true protein sequences.
+        
+    Returns:
+        float: The F1 score.
+    """
     # Here, we are using a simplistic assumption of comparing predicted proteins to true proteins
     return f1_score(true, predicted, average='micro')
 
 # Main function to process and rank proteins against multiple genomes
 def rank_proteins_for_multiple_references(reference_genomes: List[str], protein_sequences: List[str], k: int) -> List[str]:
+    """
+    Processes and ranks proteins against multiple reference genomes using k-mer matching and Smith-Waterman alignment.
+    
+    Parameters:
+        reference_genomes (List[str]): A list of reference genome sequences.
+        protein_sequences (List[str]): A list of protein sequences to rank.
+        k (int): The length of the k-mer.
+        
+    Returns:
+        Tuple[dict, dict, dict, float, float, float]: Best query sequences, best scores, best alignments, sequential processing time, parallel processing time, and F1 score.
+    """
     best_scores = {}
     best_alignments = {}
     best_query_sequences = {}
@@ -118,6 +202,7 @@ def rank_proteins_for_multiple_references(reference_genomes: List[str], protein_
 
     # Define a function to process each reference genome
     def process_reference(reference_genome):
+        
         best_score = float('-inf')
         best_alignment = None
         best_query_sequence = None
